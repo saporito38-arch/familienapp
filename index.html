@@ -188,6 +188,10 @@ dialog::backdrop{background:rgba(16,20,32,.45)}
 .vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 .linkbtn.small{font-size:13px;color:var(--muted)}
 .note{color:var(--muted);font-size:14px;font-weight:600}
+.pushbox{border-top:1px solid var(--line);padding-top:14px;margin:4px 0 14px}
+.pushbox h3{font-size:16px;margin:0 0 6px}
+.pushbox p{margin:0 0 10px}
+.pushbox .on{color:var(--family);font-weight:800}
 
 .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-weight:700;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:20;max-width:calc(100vw - 32px);text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -257,6 +261,7 @@ dialog::backdrop{background:rgba(16,20,32,.45)}
     <h2>Profile</h2>
     <div class="melist" id="melist"></div>
     <p class="note">Profilfotos sind für die ganze Familie sichtbar. Für Emilio könnt ihr ebenfalls ein Foto festlegen.</p>
+    <div class="pushbox"><h3>Benachrichtigungen</h3><div id="pushBox" class="note">Wird geprüft …</div></div>
     <div class="actions">
       <button type="button" class="btn danger" id="logoutBtn">Abmelden</button>
       <span class="spacer"></span>
@@ -272,6 +277,7 @@ dialog::backdrop{background:rgba(16,20,32,.45)}
 const SUPABASE_URL='https://ldejccrshbzvkpfokhjx.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkZWpjY3JzaGJ6dmtwZm9raGp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NTkwMDgsImV4cCI6MjEwNzIzNTAwOH0.DXIbbUfRu7UKvlK9fqNMllrSirClKtOPodUWkal9yCs';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const VAPID_PUBLIC='BNu4eNRQF-KcE0xn9roy3HufwYXvOrGJNzp5nER2A33ZWKeO7hhdyKUPCI2FOjl2kynhiui0zHpSa2hYf4K_iTY';
 
 /* ===== Hilfsfunktionen ===== */
 const COLORS={mario:'var(--mario)',nadine:'var(--nadine)',lina:'var(--lina)',emilio:'var(--emilio)'};
@@ -296,7 +302,8 @@ function dayLabel(k){const t=ymd(new Date()),y=ymd(addDays(new Date(),-1));retur
 /* ===== Zustand ===== */
 let session=null, PEOPLE=[], P={}, membersRaw=[];
 const S={me:null,familyId:null,events:[],items:[],msgs:[]};
-const ui={view:'heute',filter:null,sel:ymd(new Date()),week:startOfWeek(new Date())};
+const startView=(location.hash||'').slice(1);
+const ui={view:['heute','kalender','einkauf','chat'].includes(startView)?startView:'heute',filter:null,sel:ymd(new Date()),week:startOfWeek(new Date())};
 let live=false, channel=null;
 const $=id=>document.getElementById(id);
 const per=id=>P[id]||{id,name:'?',c:'var(--muted)',fg:'#fff',photo:''};
@@ -586,7 +593,7 @@ function renderMeList(){
     <span class="pinfo"><span class="pname">${esc(p.name)}${S.me===p.id?' (du)':''}</span>${p.photo?`<button type="button" class="linkbtn small" data-unphoto="${p.id}">Foto entfernen</button>`:''}</span>
     <span class="pacts"><label class="btn sm upl">${p.photo?'Foto ändern':'Foto wählen'}<input class="vh" type="file" accept="image/*" data-photo="${p.id}"></label></span></div>`).join('');
 }
-function openMe(){renderMeList();meDlg.showModal()}
+function openMe(){renderMeList();renderPush();meDlg.showModal()}
 function setPhoto(slug,photo){
   const p=P[slug]; if(!p) return;
   const old=p.photo; p.photo=photo;
@@ -616,10 +623,70 @@ $('melist').addEventListener('click',ev=>{
 $('meClose').onclick=()=>meDlg.close();
 $('logoutBtn').onclick=async()=>{
   if(!confirm('Wirklich abmelden?')) return;
+  try{await disablePush(true)}catch(e){}
   try{await sb.auth.signOut()}catch(e){}
   try{localStorage.removeItem(CACHE)}catch(e){}
   location.reload();
 };
+
+/* ===== Push-Benachrichtigungen ===== */
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const isStandalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+let swReg=null;
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(r=>{swReg=r}).catch(e=>console.error(e));
+  navigator.serviceWorker.addEventListener('message',e=>{
+    const v=e.data&&e.data.view;
+    if(v&&['heute','kalender','einkauf','chat'].includes(v)){ui.view=v;render({toBottom:true})}
+  });
+}
+function b64ToBytes(b){const p='='.repeat((4-b.length%4)%4);const r=atob((b+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from([...r].map(c=>c.charCodeAt(0)))}
+async function getReg(){return swReg||await navigator.serviceWorker.ready}
+async function pushState(){
+  if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)) return (isIOS&&!isStandalone)?'install':'unsupported';
+  if(Notification.permission==='denied') return 'denied';
+  const reg=await getReg(); const sub=await reg.pushManager.getSubscription();
+  return sub?'on':'off';
+}
+async function renderPush(){
+  const box=$('pushBox'); if(!box) return;
+  let st='unsupported'; try{st=await pushState()}catch(e){console.error(e)}
+  const T={
+    install:'Öffne die App über das Symbol auf dem Home-Bildschirm (Safari → Teilen → „Zum Home-Bildschirm“). Nur dort kann das iPhone bzw. iPad Benachrichtigungen anzeigen.',
+    unsupported:'Dieses Gerät oder dieser Browser unterstützt leider keine Benachrichtigungen.',
+    denied:'Benachrichtigungen sind blockiert. Du kannst sie in den Geräte-Einstellungen unter Mitteilungen → Familie wieder erlauben.'
+  };
+  if(T[st]){box.innerHTML=`<p>${T[st]}</p>`;return}
+  box.innerHTML=st==='on'
+    ?`<p><span class="on">Aktiv auf diesem Gerät.</span> Du bekommst Hinweise zur Einkaufsliste und zum Chat.</p><button type="button" class="btn sm" id="pushOff">Ausschalten</button>`
+    :`<p>Erhalte einen Hinweis, wenn etwas auf die Einkaufsliste kommt, etwas besorgt wurde oder eine Nachricht eingeht.</p><button type="button" class="btn sm primary" id="pushOn">Benachrichtigungen aktivieren</button>`;
+  const on=$('pushOn'), off=$('pushOff');
+  if(on) on.onclick=enablePush;
+  if(off) off.onclick=async()=>{await disablePush();toast('Benachrichtigungen ausgeschaltet');renderPush()};
+}
+async function enablePush(){
+  const btn=$('pushOn'); if(btn) btn.disabled=true;
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=='granted'){renderPush();return}
+    const reg=await getReg();
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToBytes(VAPID_PUBLIC)});
+    const j=sub.toJSON();
+    await sb.from('push_subscriptions').delete().eq('endpoint',j.endpoint);
+    const {error}=await sb.from('push_subscriptions').insert({family_id:S.familyId,member:S.me,endpoint:j.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth});
+    if(error){console.error(error);await sub.unsubscribe();toast('Konnte nicht aktiviert werden. Bitte später erneut versuchen.')}
+    else toast('Benachrichtigungen aktiv');
+  }catch(e){console.error(e);toast('Konnte nicht aktiviert werden.')}
+  renderPush();
+}
+async function disablePush(silent){
+  if(!('serviceWorker' in navigator)||!('PushManager' in window)) return;
+  const reg=await getReg(); const sub=await reg.pushManager.getSubscription();
+  if(!sub) return;
+  try{await sb.from('push_subscriptions').delete().eq('endpoint',sub.endpoint)}catch(e){}
+  await sub.unsubscribe();
+}
 
 /* ===== Klicks ===== */
 document.addEventListener('click',ev=>{
@@ -639,7 +706,7 @@ document.addEventListener('click',ev=>{
   if(d.check){
     const i=S.items.find(x=>x.id===d.check); if(!i) return;
     i.done=!i.done; render();
-    write(sb.from('items').update({done:i.done}).eq('id',i.id),()=>{i.done=!i.done});
+    write(sb.from('items').update({done:i.done,done_by:i.done?S.me:null}).eq('id',i.id),()=>{i.done=!i.done});
     return;
   }
   if(d.del){
