@@ -1,0 +1,12 @@
+{
+  "name": "Familie",
+  "short_name": "Familie",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F3F5FA",
+  "theme_color": "#F3F5FA",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
