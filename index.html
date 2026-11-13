@@ -174,6 +174,7 @@ body.authed #login{display:none}
 .segnav{display:flex;background:var(--soft);border-radius:14px;padding:4px;gap:4px;margin:0 0 16px}
 .segnav button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border:0;background:transparent;padding:9px 6px;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;color:var(--muted);min-width:0}
 .segnav button svg{width:17px;height:17px;flex:none}
+@media (max-width:440px){.segnav.n4 button{font-size:13px;padding:9px 2px}.segnav.n4 button svg{display:none}}
 .segnav button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
 .segnav button[aria-pressed="true"] svg{color:var(--c)}
 
@@ -338,6 +339,46 @@ dialog::backdrop{background:rgba(12,16,30,.45);backdrop-filter:blur(2px)}
 .pushbox p{margin:0 0 10px}
 .pushbox .on{color:var(--brand);font-weight:800}
 
+/* Modul-Kacheln (Übersicht) */
+.modgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.mod{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;border:0;border-radius:22px;padding:16px 16px 14px;min-height:150px;background:var(--surface);box-shadow:var(--shadow);cursor:pointer;min-width:0;color:var(--ink);transition:transform .12s}
+.mod:active{transform:scale(.97)}
+.mod .mt{font-size:19px;font-weight:800;letter-spacing:-.015em;line-height:1.2}
+.mod .ms{font-size:14px;color:var(--muted);font-weight:600;margin-top:4px;padding-right:50px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.mod .mi{position:absolute;right:14px;bottom:14px;width:54px;height:54px;color:var(--c)}
+.mod .mi svg{width:100%;height:100%;display:block}
+svg.duo{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+svg.duo .f{fill:currentColor;fill-opacity:.22;stroke:none}
+svg.duo text{fill:currentColor;stroke:none;font-weight:800;font-family:inherit}
+.mod .badge{position:absolute;top:14px;right:14px;min-width:22px;height:22px;padding:0 7px;border-radius:11px;background:var(--warn);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center}
+@media (max-width:360px){.mod{min-height:136px;padding:14px}.mod .mt{font-size:17px}.mod .mi{width:46px;height:46px}}
+
+/* Geburtstage */
+.brow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;padding:11px 16px;cursor:pointer}
+.brow .bav{width:44px;height:44px;flex:none;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c)}
+.brow .bav svg{width:26px;height:26px}
+.brow .bt{flex:1;min-width:0}
+.brow .bn{display:block;font-weight:800;overflow-wrap:anywhere}
+.brow .bd{display:block;font-size:13px;color:var(--muted);font-weight:600}
+.cd{flex:none;text-align:center;min-width:58px;padding:4px 8px;border-radius:12px;background:var(--soft);font-weight:800;font-size:18px;line-height:1.1}
+.cd small{display:block;font-size:11px;color:var(--muted);font-weight:700}
+.cd.hot{background:var(--nadine);color:#fff}
+.cd.hot small{color:#fff;opacity:.85}
+.notice{background:color-mix(in srgb,var(--emilio) 14%,var(--surface));border-radius:var(--r);padding:14px 16px;font-weight:600;font-size:14px;margin-bottom:14px}
+.notice b{display:block;font-size:15px;margin-bottom:4px}
+
+/* Rezepte */
+.rcard{display:flex;flex-direction:column;gap:10px;padding:14px 16px}
+.rcard .rh{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:0;cursor:pointer}
+.rcard .ri{width:46px;height:46px;flex:none;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--emilio) 18%,transparent);color:#E08A00}
+.rcard .ri svg{width:28px;height:28px}
+.rcard .rn{display:block;font-weight:800;overflow-wrap:anywhere}
+.rcard .rz{display:block;font-size:13px;color:var(--muted);font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rcard .ra{display:flex;gap:8px;flex-wrap:wrap}
+.rcard .ra .btn{display:inline-flex;align-items:center;gap:6px}
+.rcard .ra svg{width:16px;height:16px}
+.search{margin-bottom:12px}
+
 .toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:20;max-width:calc(100vw - 32px);text-align:center;box-shadow:var(--shadow-lg)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 #view.anim{animation:fade .24s ease}
@@ -410,7 +451,7 @@ dialog::backdrop{background:rgba(12,16,30,.45);backdrop-filter:blur(2px)}
 <dialog id="mealDlg">
   <form class="dlg" id="mealForm" novalidate>
     <h2 id="mealDlgTitle">Essen planen</h2>
-    <label class="field"><span>Was gibt es?</span><input type="text" name="title" maxlength="80" placeholder="z. B. Spaghetti Bolognese" autocomplete="off"></label>
+    <label class="field"><span>Was gibt es?</span><input type="text" name="title" maxlength="80" placeholder="z. B. Spaghetti Bolognese" autocomplete="off" list="recipeList"><datalist id="recipeList"></datalist></label>
     <div class="row">
       <label class="field"><span>Tag</span><input type="date" name="date"></label>
       <div class="field"><span>Mahlzeit</span><div class="seg" id="slotSeg"><button type="button" data-slot="mittag">Mittag</button><button type="button" data-slot="abend">Abend</button></div></div>
@@ -439,6 +480,40 @@ dialog::backdrop{background:rgba(12,16,30,.45);backdrop-filter:blur(2px)}
       <button type="button" class="btn danger" id="taskDelete">Löschen</button>
       <span class="spacer"></span>
       <button type="button" class="btn" id="taskCancel">Abbrechen</button>
+      <button type="submit" class="btn primary">Speichern</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="bdayDlg">
+  <form class="dlg" id="bdayForm" novalidate>
+    <h2 id="bdayDlgTitle">Geburtstag eintragen</h2>
+    <label class="field"><span>Wer hat Geburtstag?</span><input type="text" name="name" maxlength="60" placeholder="z. B. Oma Rosi" autocomplete="off"></label>
+    <label class="field"><span>Geburtsdatum</span><input type="date" name="date"></label>
+    <label class="toggle"><input type="checkbox" name="noYear"> Geburtsjahr unbekannt (kein Alter anzeigen)</label>
+    <label class="field"><span>Notiz</span><textarea name="note" rows="2" maxlength="200" placeholder="Optional, z. B. Geschenkidee"></textarea></label>
+    <p class="err" id="bdayErr" role="alert"></p>
+    <div class="actions">
+      <button type="button" class="btn danger" id="bdayDelete">Löschen</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="bdayCancel">Abbrechen</button>
+      <button type="submit" class="btn primary">Speichern</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="recipeDlg">
+  <form class="dlg" id="recipeForm" novalidate>
+    <h2 id="recipeDlgTitle">Rezept speichern</h2>
+    <label class="field"><span>Name des Gerichts</span><input type="text" name="title" maxlength="80" placeholder="z. B. Omas Kartoffelsuppe" autocomplete="off"></label>
+    <label class="field"><span>Zutaten</span><textarea name="ingredients" rows="3" maxlength="600" placeholder="Mit Komma oder Zeilenumbruch trennen"></textarea></label>
+    <label class="field"><span>Zubereitung</span><textarea name="steps" rows="4" maxlength="3000" placeholder="Optional"></textarea></label>
+    <label class="field"><span>Link (optional)</span><input type="text" name="link" maxlength="300" placeholder="https://…" autocomplete="off" inputmode="url"></label>
+    <p class="err" id="recipeErr" role="alert"></p>
+    <div class="actions">
+      <button type="button" class="btn danger" id="recipeDelete">Löschen</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="recipeCancel">Abbrechen</button>
       <button type="submit" class="btn primary">Speichern</button>
     </div>
   </form>
@@ -475,7 +550,7 @@ const WDK=['So','Mo','Di','Mi','Do','Fr','Sa'];
 const WDS=['Mo','Di','Mi','Do','Fr','Sa','So'];
 const MON=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const CACHE='familienapp-cache-v2';
-const VIEWS=['heute','kalender','essen','einkauf','aufgaben','chat'];
+const VIEWS=['heute','kalender','geburtstage','essen','einkauf','aufgaben','rezepte','chat'];
 
 const pad=n=>String(n).padStart(2,'0');
 const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -500,13 +575,27 @@ const IC={
   aufgaben:'<rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M8.5 12.3l2.4 2.4 4.6-4.9"/>',
   listen:'<path d="M9 6.5h11M9 12h11M9 17.5h11"/><path d="M4 6.5l1 1 2-2M4 12l1 1 2-2M4 17.5l1 1 2-2"/>',
   chat:'<path d="M20.5 12a8.5 8.5 0 0 1-12.4 7.5L3.5 20.5l1.1-4.3A8.5 8.5 0 1 1 20.5 12z"/>',
+  rezepte:'<path d="M5 10h14v6.5a3.5 3.5 0 0 1-3.5 3.5h-7A3.5 3.5 0 0 1 5 16.5zM3 10h18M12 5.5V8M9.5 5.5h5"/>',
+  geburtstage:'<path d="M4.5 20.5h15M6 20.5v-7h12v7M6 16.5c2 1.2 4 1.2 6 0s4-1.2 6 0M12 13.5v-3M12 7.5c-.9 0-1.5-.7-1.5-1.5S12 3.5 12 3.5s1.5 1.7 1.5 2.5-.6 1.5-1.5 1.5z"/>',
   family:'<circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9.5" r="2.5"/><path d="M3 19.5c.6-3.4 3-5.3 6-5.3s5.4 1.9 6 5.3M15 14.6c2.8-.4 5.2 1.2 6 4.9"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
   left:'<path d="M14.5 6l-6 6 6 6"/>',
   right:'<path d="M9.5 6l6 6-6 6"/>',
   cartplus:'<path d="M3 4h2l2.3 10.8a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 1.9-1.5L20.5 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/>'
 };
-const LISTS=['einkauf','aufgaben','essen'];
+const DUO={
+  kalender:d=>`<rect class="f" x="3.5" y="5" width="17" height="15.5" rx="3.5"/><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M8 3v4M16 3v4"/><text x="12" y="17.6" text-anchor="middle" font-size="8.4">${d}</text>`,
+  einkauf:()=>'<rect class="f" x="4" y="3.5" width="16" height="17" rx="4"/><rect x="4" y="3.5" width="16" height="17" rx="4"/><path d="M10.5 8.5h6M10.5 12h6M10.5 15.5h6"/><circle cx="7.6" cy="8.5" r=".6"/><circle cx="7.6" cy="12" r=".6"/><circle cx="7.6" cy="15.5" r=".6"/>',
+  aufgaben:()=>'<rect class="f" x="3.5" y="3.5" width="17" height="17" rx="5"/><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><path d="M8.3 12.3l2.6 2.6 5-5.4"/>',
+  essen:()=>'<path d="M6 3v6.5a2.2 2.2 0 0 0 4.4 0V3M8.2 3v18"/><path class="f" d="M18 21V3c-2.6 1.3-3.8 4.2-3.8 8 0 2.7 1.4 4.1 3.8 4.1"/><path d="M18 21V3c-2.6 1.3-3.8 4.2-3.8 8 0 2.7 1.4 4.1 3.8 4.1"/>',
+  rezepte:()=>'<path class="f" d="M5 10h14v6.5a3.5 3.5 0 0 1-3.5 3.5h-7A3.5 3.5 0 0 1 5 16.5z"/><path d="M5 10h14v6.5a3.5 3.5 0 0 1-3.5 3.5h-7A3.5 3.5 0 0 1 5 16.5zM3 10h18M12 5.5V8M9.5 5.5h5M2.5 13H5M19 13h2.5"/>',
+  geburtstage:()=>'<rect class="f" x="3.5" y="5" width="17" height="15.5" rx="3.5"/><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M8 3v4M16 3v4"/><path d="M12 9.6l1.4 2.8 3 .4-2.2 2.1.5 3L12 16.5l-2.7 1.4.5-3-2.2-2.1 3-.4z"/>',
+  chat:()=>'<path class="f" d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-4.5 3.5V17H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-4.5 3.5V17H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7.5 8.5h9M7.5 12h6"/>',
+  family:()=>'<circle class="f" cx="9" cy="8" r="3.4"/><circle cx="9" cy="8" r="3.4"/><circle cx="17" cy="9.5" r="2.6"/><path class="f" d="M2.8 19.5c.6-3.6 3.1-5.6 6.2-5.6s5.6 2 6.2 5.6z"/><path d="M2.8 19.5c.6-3.6 3.1-5.6 6.2-5.6s5.6 2 6.2 5.6zM15 14.4c3-.4 5.4 1.3 6.2 5.1"/>'
+};
+const duo=(k,arg)=>`<svg class="duo" viewBox="0 0 24 24" aria-hidden="true">${DUO[k](arg)}</svg>`;
+const LISTS=['einkauf','aufgaben','essen','rezepte'];
+const CALS=['kalender','geburtstage'];
 const TABS=[['heute','Start','heute'],['kalender','Kalender','kalender'],['add','',''],['listen','Listen','listen'],['chat','Chat','chat']];
 const ico=(k,cls='i')=>`<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
 const STAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg>';
@@ -558,7 +647,7 @@ const empty=(k,text,btn)=>`<div class="empty">${EMPTY[k]}${text}${btn?`<br>${btn
 
 /* ===== Zustand ===== */
 let session=null, PEOPLE=[], P={}, membersRaw=[];
-const S={me:null,familyId:null,events:[],items:[],msgs:[],meals:[],tasks:[]};
+const S={me:null,familyId:null,events:[],items:[],msgs:[],meals:[],tasks:[],birthdays:[],recipes:[],missing:{}};
 const startView=(location.hash||'').slice(1);
 const ui={view:VIEWS.includes(startView)?startView:'heute',filter:null,sel:ymd(new Date()),week:startOfWeek(new Date()),mweek:startOfWeek(new Date()),tfilter:null,list:'einkauf',month:new Date(new Date().getFullYear(),new Date().getMonth(),1)};
 let live=false, channel=null;
@@ -571,6 +660,8 @@ const mapEv=r=>({id:r.id,title:r.title,date:r.date,allDay:r.all_day,start:r.star
 const mapItem=r=>({id:r.id,text:r.text,done:r.done,by:r.added_by,ts:Date.parse(r.created_at)||Date.now()});
 const mapMsg=r=>({id:r.id,by:r.sender,text:r.body,ts:Date.parse(r.created_at)||Date.now()});
 const mapMeal=r=>({id:r.id,date:r.date,slot:r.slot,title:r.title,ingredients:r.ingredients||'',cook:r.cook||''});
+const mapBday=r=>({id:r.id,name:r.name,date:r.date,noYear:!!r.no_year,note:r.note||''});
+const mapRecipe=r=>({id:r.id,title:r.title,ingredients:r.ingredients||'',steps:r.steps||'',link:r.link||'',ts:Date.parse(r.created_at)||Date.now()});
 const mapTask=r=>({id:r.id,title:r.title,assignee:r.assignee,due:r.due||'',stars:r.stars||0,done:r.done,doneAt:r.done_at?Date.parse(r.done_at):0,createdBy:r.created_by||'',ts:Date.parse(r.created_at)||Date.now()});
 function setMembers(rows){
   membersRaw=rows;
@@ -578,7 +669,7 @@ function setMembers(rows){
   P=Object.fromEntries(PEOPLE.map(p=>[p.id,p]));
 }
 function cache(){
-  try{localStorage.setItem(CACHE,JSON.stringify({userId:session&&session.user.id,members:membersRaw,me:S.me,familyId:S.familyId,events:S.events,items:S.items,msgs:S.msgs,meals:S.meals,tasks:S.tasks}))}catch(e){}
+  try{localStorage.setItem(CACHE,JSON.stringify({userId:session&&session.user.id,members:membersRaw,me:S.me,familyId:S.familyId,events:S.events,items:S.items,msgs:S.msgs,meals:S.meals,tasks:S.tasks,birthdays:S.birthdays,recipes:S.recipes}))}catch(e){}
 }
 function readCache(){try{return JSON.parse(localStorage.getItem(CACHE))}catch(e){return null}}
 
@@ -590,17 +681,22 @@ async function loadAll(){
   if(!mine) throw new Error('nofamily');
   S.familyId=mine.family_id; S.me=mine.slug; setMembers(mem);
   const since=ymd(addDays(new Date(),-21));
-  const [ev,it,ms,me,ta]=await Promise.all([
+  const [ev,it,ms,me,ta,bd,rc]=await Promise.all([
     sb.from('events').select('*').order('date'),
     sb.from('items').select('*').order('created_at',{ascending:false}),
     sb.from('messages').select('*').order('created_at',{ascending:false}).limit(300),
     sb.from('meals').select('*').gte('date',since).order('date'),
-    sb.from('tasks').select('*').order('created_at',{ascending:false}).limit(500)
+    sb.from('tasks').select('*').order('created_at',{ascending:false}).limit(500),
+    sb.from('birthdays').select('*').order('date'),
+    sb.from('recipes').select('*').order('title')
   ]);
   for(const r of [ev,it,ms]) if(r.error) throw r.error;
   S.events=ev.data.map(mapEv); S.items=it.data.map(mapItem); S.msgs=ms.data.map(mapMsg);
   if(me.error) console.warn('Essensplan nicht verfügbar',me.error); else S.meals=me.data.map(mapMeal);
   if(ta.error) console.warn('Aufgaben nicht verfügbar',ta.error); else S.tasks=ta.data.map(mapTask);
+  S.missing.birthdays=!!bd.error; S.missing.recipes=!!rc.error;
+  if(bd.error) console.warn('Geburtstage nicht verfügbar',bd.error); else S.birthdays=bd.data.map(mapBday);
+  if(rc.error) console.warn('Rezepte nicht verfügbar',rc.error); else S.recipes=rc.data.map(mapRecipe);
   cache();
 }
 function upsert(arr,kind,row,map){
@@ -625,6 +721,8 @@ function subscribe(){
   on('messages',(k,r)=>{S.msgs=upsert(S.msgs,k,r,mapMsg)});
   on('meals',(k,r)=>{S.meals=upsert(S.meals,k,r,mapMeal)});
   on('tasks',(k,r)=>{S.tasks=upsert(S.tasks,k,r,mapTask)});
+  on('birthdays',(k,r)=>{S.birthdays=upsert(S.birthdays,k,r,mapBday)});
+  on('recipes',(k,r)=>{S.recipes=upsert(S.recipes,k,r,mapRecipe)});
   on('members',(k,r)=>{if(k==='up'){setMembers(membersRaw.map(m=>m.id===r.id?r:m));if($('meDlg').open)renderMeList()}});
   channel.subscribe(status=>{const was=live;live=status==='SUBSCRIBED';if(was!==live)render()});
 }
@@ -696,8 +794,32 @@ const card=(head,body,{flush=false,add=''}={})=>`<section class="card"><div clas
 const addRow=(attr,label)=>`<button class="addrow" ${attr}>${ico('plus')}${label}</button>`;
 const meBtn=()=>{const me=per(S.me);return `<button class="me" id="meBtn" style="${pv(me.id)}" aria-label="Angemeldet als ${esc(me.name)}. Profile öffnen">${av(me.id)}</button>`};
 const offlinePill=()=>live?'':'<span class="offline">Nicht verbunden</span>';
-const segnav=()=>`<div class="segnav" role="group" aria-label="Listen">${[['einkauf','Einkauf','var(--family)'],['aufgaben','Aufgaben','var(--lina)'],['essen','Essen','var(--emilio)']]
+const SEGS={listen:[['einkauf','Einkauf','var(--family)'],['aufgaben','Aufgaben','var(--lina)'],['essen','Essen','var(--emilio)'],['rezepte','Rezepte','#E08A00']],
+  kal:[['kalender','Termine','var(--mario)'],['geburtstage','Geburtstage','var(--nadine)']]};
+const segnav=(g='listen')=>`<div class="segnav n${SEGS[g].length}" role="group" aria-label="${g==='kal'?'Kalender':'Listen'}">${SEGS[g]
   .map(([k,l,c])=>`<button data-tab="${k}" aria-pressed="${ui.view===k}" style="--c:${c}">${ico(k)}${l}</button>`).join('')}</div>`;
+
+/* ===== Geburtstage: Berechnung ===== */
+const isLeap=y=>(y%4===0&&y%100!==0)||y%400===0;
+function bdayIn(b,y){const[,m,d]=b.date.split('-').map(Number);return (m===2&&d===29&&!isLeap(y))?new Date(y,1,28):new Date(y,m-1,d)}
+function nextBday(b){
+  const t=new Date(), t0=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+  let n=bdayIn(b,t0.getFullYear()); if(n<t0) n=bdayIn(b,t0.getFullYear()+1);
+  return {date:n,days:Math.round((n-t0)/864e5),age:b.noYear?null:n.getFullYear()-Number(b.date.slice(0,4))};
+}
+const bdaysOn=k=>{const d=parse(k);return S.birthdays.filter(b=>ymd(bdayIn(b,d.getFullYear()))===k)};
+const ageOn=(b,k)=>b.noYear?null:Number(k.slice(0,4))-Number(b.date.slice(0,4));
+const cdText=n=>n===0?'Heute':n===1?'Morgen':`in ${n} Tagen`;
+function bdayRow(b,k){
+  const nb=nextBday(b), age=k?ageOn(b,k):nb.age, days=k?null:nb.days;
+  const d=parse(b.date);
+  const isT=k===todayKey();
+  const sub=k?(age!=null?`wird ${isT?'heute ':''}${age}`:(isT?'hat heute Geburtstag':'hat Geburtstag')):`${d.getDate()}. ${MON[d.getMonth()]}${age!=null?` · wird ${age}`:''}`;
+  return `<button class="brow" data-bday="${b.id}" style="--c:var(--nadine)"><span class="bav">${ico('geburtstage')}</span>
+    <span class="bt"><span class="bn">${esc(b.name)}</span><span class="bd">${sub}</span></span>
+    ${days==null?ico('right','i chev'):`<span class="cd${days<=7?' hot':''}">${days===0?'🎉':days}<small>${days===0?'Heute':days===1?'Tag':'Tage'}</small></span>`}</button>`;
+}
+const missingNote=k=>`<div class="notice"><b>Noch nicht eingerichtet</b>Für ${k} fehlt in Supabase noch die Tabelle. Führe einmal die Datei <code>supabase/neue-bereiche.sql</code> im SQL-Editor von Supabase aus, danach funktioniert der Bereich.</div>`;
 
 /* ===== Ansichten ===== */
 function header(){
@@ -705,6 +827,8 @@ function header(){
   const v=ui.view;
   if(v==='heute'){$('top').innerHTML='';return}
   let h='',sub='';
+  if(v==='geburtstage'){h='Kalender';sub=S.birthdays.length?`${plural(S.birthdays.length,'Geburtstag','Geburtstage')} gespeichert`:'Geburtstage der Familie';}
+  if(v==='rezepte'){h='Listen';sub=S.recipes.length?`${plural(S.recipes.length,'Rezept','Rezepte')}`:'Eure Lieblingsrezepte';}
   if(v==='kalender'){h='Kalender';sub=ui.filter?`Ansicht für ${per(ui.filter).name}`:'Termine der ganzen Familie';}
   if(v==='essen'){h='Listen';sub='Essensplan der Woche';}
   if(v==='einkauf'){const n=S.items.filter(i=>!i.done).length;h='Listen';sub=n?`Einkauf: ${plural(n,'Sache','Sachen')} offen`:'Einkauf: alles erledigt';}
@@ -714,7 +838,7 @@ function header(){
 }
 function viewHeute(){
   const me=per(S.me), today=todayKey(), tomorrow=ymd(addDays(new Date(),1));
-  const tEv=eventsOn(today), mEv=eventsOn(tomorrow);
+  const tEv=eventsOn(today), mEv=eventsOn(tomorrow), tB=bdaysOn(today), mB=bdaysOn(tomorrow);
   const open=S.items.filter(i=>!i.done).sort((a,b)=>b.ts-a.ts);
   const who=ui.filter||S.me, myTasks=openTasks(who);
   const meals=mealsOn(today);
@@ -734,28 +858,27 @@ function viewHeute(){
       <span class="nm">${esc(p.name)}</span></button>`;
   }).join('');
   const hint=ui.filter?`<p class="filterhint">Ansicht für ${esc(per(ui.filter).name)}. <button class="linkbtn" data-filter="">Alle zeigen</button></p>`:`<p class="filterhint">Tippe auf eine Person, um nur ihren Tag zu sehen.</p>`;
-  const tile=(tab,c,i,val,lbl,txt)=>`<button class="tile" data-tab="${tab}" style="--c:${c}"><span class="ico">${ico(i)}</span><span class="tw"><span class="tv${txt?' txt':''}">${val}</span><span class="tl">${lbl}</span></span></button>`;
-  const tiles=`<div class="tiles">
-    ${tile('kalender','var(--mario)','kalender',allEv,allEv===1?'Termin heute':'Termine heute')}
-    ${tile('aufgaben','var(--lina)','aufgaben',allTasks,allTasks===1?'Aufgabe offen':'Aufgaben offen')}
-    ${tile('einkauf','var(--family)','einkauf',open.length,'auf der Einkaufsliste')}
-    ${tile('essen','var(--emilio)','essen',meals.length?esc(meals[meals.length-1].title):'Noch offen','heute zum Essen',true)}
+  const mk=today.slice(0,7), monthEv=S.events.filter(e=>e.date.slice(0,7)===mk).length;
+  const nb=S.birthdays.map(b=>({b,...nextBday(b)})).sort((a,b)=>a.days-b.days)[0];
+  const mod=(attr,c,icon,title,sub,badge='')=>`<button class="mod" ${attr} style="--c:${c}"><span class="mt">${title}</span><span class="ms">${sub}</span>${badge?`<span class="badge">${badge}</span>`:''}<span class="mi">${icon}</span></button>`;
+  const tiles=`<div class="modgrid">
+    ${mod('data-tab="kalender"','#8B67E8',duo('kalender',new Date().getDate()),'Kalender',allEv?`${plural(allEv,'Termin','Termine')} heute`:`${plural(monthEv,'Termin','Termine')} diesen Monat`)}
+    ${mod('data-tab="einkauf"','#F5B400',duo('einkauf'),'Einkauf',open.length?`${plural(open.length,'Sache','Sachen')} auf der Liste`:'Nichts zu kaufen')}
+    ${mod('data-tab="aufgaben"','#22B8AB',duo('aufgaben'),'Aufgaben',allTasks?`${allTasks} offen`:'Alles erledigt')}
+    ${mod('data-tab="essen"','#5B8DEF',duo('essen'),'Essensplaner',meals.length?`Heute: ${esc(meals[meals.length-1].title)}`:'Heute noch nichts geplant')}
+    ${mod('data-tab="rezepte"','#F59E3C',duo('rezepte'),'Rezepte',S.missing.recipes?'Noch einrichten':S.recipes.length?plural(S.recipes.length,'Rezept','Rezepte'):'Kein Rezept')}
+    ${mod('data-tab="geburtstage"','#F07B8C',duo('geburtstage'),'Geburtstage',S.missing.birthdays?'Noch einrichten':nb?`${esc(nb.b.name)}: ${cdText(nb.days)}`:'Countdown zu Geburtstagen',nb&&nb.days===0?'🎉':'')}
+    ${mod('data-tab="chat"','#2EC4A6',duo('chat'),'Nachrichten',last?`${esc(per(last.by).name)}: ${esc(last.text)}`:'Noch keine Nachricht')}
+    ${mod('data-open-me','#7CCB9A',duo('family'),'Meine Familie',`${plural(PEOPLE.length,'Mitglied','Mitglieder')}`)}
   </div>`;
   const evCardHtml=card(`${secTitle('termine','Heute')}<button class="linkbtn" data-tab="kalender">Kalender</button>`,
-    tEv.length?`<div class="list">${tEv.map(e=>evCard(e)).join('')}</div>`:`<div class="empty">Heute steht nichts an.</div>`,
+    (tEv.length||tB.length)?`<div class="list">${tB.map(b=>bdayRow(b,today)).join('')}${tEv.map(e=>evCard(e)).join('')}</div>`:`<div class="empty">Heute steht nichts an.</div>`,
     {flush:true,add:addRow('data-new-ev','Termin hinzufügen')});
-  const tmCard=mEv.length?card(secTitle('termine','Morgen'),`<div class="list">${mEv.map(e=>evCard(e,true)).join('')}</div>`,{flush:true}):'';
+  const tmCard=(mEv.length||mB.length)?card(secTitle('termine','Morgen'),`<div class="list">${mB.map(b=>bdayRow(b,tomorrow)).join('')}${mEv.map(e=>evCard(e,true)).join('')}</div>`,{flush:true}):'';
   const taskCard=card(`${secTitle('aufgaben',who===S.me?'Deine Aufgaben':`Aufgaben von ${esc(per(who).name)}`)}<button class="linkbtn" data-tab="aufgaben">Alle</button>`,
     myTasks.length?`<div class="list">${myTasks.slice(0,4).map(t=>taskRow(t,false)).join('')}</div>`:`<div class="empty">Keine offenen Aufgaben.</div>`,
     {flush:true,add:addRow('data-new-task','Aufgabe anlegen')});
-  const mealHtml=card(`${secTitle('essen','Heute auf dem Tisch')}<button class="linkbtn" data-tab="essen">Wochenplan</button>`,
-    meals.length?meals.map(mealCard).join(''):`<div class="empty" style="padding:6px 0 4px">Noch nichts geplant.</div>`,
-    {add:meals.length?'':addRow(`data-new-meal="${today}"`,'Essen für heute planen')});
-  const shopHtml=card(`${secTitle('einkauf','Einkaufsliste')}<button class="linkbtn" data-tab="einkauf">Zur Liste</button>`,
-    open.length?`<div class="chips">${open.slice(0,10).map(i=>`<span class="chip">${esc(i.text)}</span>`).join('')}${open.length>10?`<span class="chip">+${open.length-10}</span>`:''}</div>`:`<div class="empty" style="padding:6px 0 4px">Nichts zu kaufen.</div>`);
-  const chatHtml=last?card(`${secTitle('chat','Familienchat')}<button class="linkbtn" data-tab="chat">Öffnen</button>`,
-    `<button class="preview" data-tab="chat" style="${pv(last.by)}"><span class="pav">${av(last.by)}</span><span class="pt"><span class="from">${esc(per(last.by).name)} · ${hm(last.ts)}</span><span class="txt">${esc(last.text)}</span></span></button>`,{flush:true}):'';
-  return `${cover}<div class="family">${fam}</div>${hint}${tiles}${evCardHtml}${tmCard}${taskCard}${mealHtml}${shopHtml}${chatHtml}`;
+  return `${cover}${tiles}<div class="family">${fam}</div>${hint}${evCardHtml}${tmCard}${taskCard}`;
 }
 function weekNav(s,attr){
   const e=addDays(s,6);
@@ -774,18 +897,19 @@ function viewKalender(){
   let cells=WDS.map(w=>`<span class="wdh">${w}</span>`).join('');
   for(let i=0;i<weeks*7;i++){
     const d=addDays(first,i), k=ymd(d);
-    const who=[...new Set(eventsOn(k).flatMap(x=>x.people))].sort((a,b)=>order(a)-order(b)).slice(0,4);
+    const who=[...new Set(eventsOn(k).flatMap(x=>x.people))].sort((a,b)=>order(a)-order(b)).slice(0,bdaysOn(k).length?3:4);
+    if(bdaysOn(k).length) who.push('_bday');
     const cls=['mcell',d.getMonth()!==mo?'out':'',k===today?'today':'',i%7>=5?'we':''].filter(Boolean).join(' ');
     cells+=`<button class="${cls}" data-day="${k}" aria-pressed="${k===ui.sel}" aria-label="${fmtLong(d)}${who.length?', Termine':''}">
-      <span class="num">${d.getDate()}</span><span class="dots">${who.map(id=>`<span class="dot" style="${pv(id)}"></span>`).join('')}</span></button>`;
+      <span class="num">${d.getDate()}</span><span class="dots">${who.map(id=>`<span class="dot" style="${id==='_bday'?'--c:var(--star)':pv(id)}"></span>`).join('')}</span></button>`;
   }
   const filt=`<button class="pchip" data-filter="" aria-pressed="${!ui.filter}" style="--c:var(--family);--fg:#fff">Alle</button>`+
     PEOPLE.map(p=>`<button class="pchip" data-filter="${p.id}" aria-pressed="${ui.filter===p.id}" style="${pv(p.id)}">${esc(p.name)}</button>`).join('');
-  const list=eventsOn(ui.sel);
+  const list=eventsOn(ui.sel), selB=bdaysOn(ui.sel);
   const until=ymd(addDays(parse(ui.sel),14));
   const next=S.events.filter(e=>e.date>ui.sel&&e.date<=until&&(!ui.filter||e.people.includes(ui.filter))).sort((a,b)=>a.date.localeCompare(b.date)||sortEv(a,b)).slice(0,6);
   const selHead=`<h2>${ui.sel===today?'Heute, ':''}${fmtLong(parse(ui.sel))}</h2>`;
-  return `<div class="month">
+  return `${segnav('kal')}<div class="month">
       <div class="mhead"><span class="ml">${MON[mo]} ${y}</span><span class="mr">
         <button class="today-btn" data-month="0">Heute</button>
         <button class="round" data-month="-1" aria-label="Vorheriger Monat">${ico('left')}</button>
@@ -793,7 +917,7 @@ function viewKalender(){
       <div class="mgrid">${cells}</div>
     </div>
     <div class="pick kfilter">${filt}</div>
-    ${card(selHead,list.length?`<div class="list">${list.map(x=>evCard(x)).join('')}</div>`:empty('kalender','Keine Termine an diesem Tag.'),{flush:true,add:addRow('data-new-ev','Termin hinzufügen')})}
+    ${card(selHead,(list.length||selB.length)?`<div class="list">${selB.map(b=>bdayRow(b,ui.sel)).join('')}${list.map(x=>evCard(x)).join('')}</div>`:empty('kalender','Keine Termine an diesem Tag.'),{flush:true,add:addRow('data-new-ev','Termin hinzufügen')})}
     ${next.length?card('<h2>Als Nächstes</h2>',`<div class="list">${next.map(x=>evCard(x,true,true)).join('')}</div>`,{flush:true}):''}`;
 }
 function viewEssen(){
@@ -838,6 +962,27 @@ function viewAufgaben(){
       ${open.length?`<div class="list">${open.map(t=>taskRow(t,!f)).join('')}</div>`:empty('aufgaben','Keine offenen Aufgaben.','<button class="btn primary" data-new-task>Aufgabe anlegen</button>')}</section>
     ${done.length?`<section class="sec"><div class="sec-head"><h2>Erledigt in den letzten 7 Tagen</h2></div><div class="list">${done.map(t=>taskRow(t,!f)).join('')}</div></section>`:''}`;
 }
+function viewGeburtstage(){
+  if(S.missing.birthdays&&!S.birthdays.length) return `${segnav('kal')}${missingNote('Geburtstage')}`;
+  const rows=S.birthdays.map(b=>({b,n:nextBday(b)})).sort((a,c)=>a.n.days-c.n.days||a.b.name.localeCompare(c.b.name));
+  const soon=rows.filter(r=>r.n.days<=30), later=rows.filter(r=>r.n.days>30);
+  const block=(t,arr)=>arr.length?`<section class="sec"><div class="sec-head"><h2>${t}</h2></div><div class="list">${arr.map(r=>bdayRow(r.b)).join('')}</div></section>`:'';
+  return `${segnav('kal')}${rows.length?block('In den nächsten 30 Tagen',soon)+block('Später im Jahr',later)
+    :`<section class="sec"><div class="empty" style="background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow)">${duo('geburtstage')}Noch keine Geburtstage gespeichert.<br><button class="btn primary" data-new-bday>Geburtstag eintragen</button></div></section>`}
+    ${rows.length?`<button class="ghost" data-new-bday>${ico('plus')}Geburtstag eintragen</button>`:''}`;
+}
+function viewRezepte(){
+  if(S.missing.recipes&&!S.recipes.length) return `${segnav()}${missingNote('Rezepte')}`;
+  const q=(ui.rq||'').toLowerCase();
+  const list=S.recipes.filter(r=>!q||r.title.toLowerCase().includes(q)||r.ingredients.toLowerCase().includes(q)).sort((a,b)=>a.title.localeCompare(b.title));
+  const rc=r=>{const n=ingList(r).length;return `<div class="rcard">
+      <button class="rh" data-recipe="${r.id}"><span class="ri">${duo('rezepte')}</span><span><span class="rn">${esc(r.title)}</span><span class="rz">${n?esc(ingList(r).join(', ')):'Keine Zutaten eingetragen'}</span></span></button>
+      <span class="ra"><button class="btn sm primary" data-rplan="${r.id}">${ico('essen')}Einplanen</button>${n?`<button class="btn sm" data-rshop="${r.id}">${ico('cartplus')}Zutaten einkaufen</button>`:''}</span></div>`};
+  return `${segnav()}
+    ${S.recipes.length>5?`<input type="text" id="rq" class="search" placeholder="Rezept oder Zutat suchen" value="${esc(ui.rq||'')}" autocomplete="off" aria-label="Rezepte durchsuchen">`:''}
+    <section class="sec"><div class="sec-head"><h2>${q?`Treffer (${list.length})`:'Eure Rezepte'}</h2><button class="linkbtn" data-new-recipe>+ Neues Rezept</button></div>
+    ${list.length?`<div class="list">${list.map(rc).join('')}</div>`:empty('essen',q?'Kein Rezept gefunden.':'Noch keine Rezepte. Speichert eure Lieblingsgerichte, dann plant ihr sie mit einem Tipp ein.',q?'':'<button class="btn primary" data-new-recipe>Rezept speichern</button>')}</section>`;
+}
 function viewChat(){
   const msgs=[...S.msgs].sort((a,b)=>a.ts-b.ts);
   if(!msgs.length) return `<section class="sec">${empty('chat','Noch keine Nachrichten. Schreib unten die erste.')}</section>`;
@@ -866,18 +1011,21 @@ function render(opts={}){
   const v=ui.view;
   if(LISTS.includes(v)) ui.list=v;
   const ni=$('newItem'), keep=ni?{v:ni.value,f:document.activeElement===ni}:null;
+  const rqf=document.activeElement&&document.activeElement.id==='rq';
   const nearBottom=window.innerHeight+window.scrollY>=document.body.scrollHeight-160;
   header();
-  const V={heute:viewHeute,kalender:viewKalender,essen:viewEssen,einkauf:viewEinkauf,aufgaben:viewAufgaben,chat:viewChat};
+  const V={heute:viewHeute,kalender:viewKalender,geburtstage:viewGeburtstage,essen:viewEssen,einkauf:viewEinkauf,aufgaben:viewAufgaben,rezepte:viewRezepte,chat:viewChat};
   const vw=$('view');
   vw.innerHTML=V[v]();
   if(v!==lastView){vw.classList.remove('anim');void vw.offsetWidth;vw.classList.add('anim');lastView=v}
-  document.querySelectorAll('.tabs [data-tab]').forEach(b=>{const k=b.dataset.tab;if(k===v||(k==='listen'&&LISTS.includes(v)))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  document.querySelectorAll('.tabs [data-tab]').forEach(b=>{const k=b.dataset.tab;if(k===v||(k==='listen'&&LISTS.includes(v))||(k==='kalender'&&CALS.includes(v)))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   const nOpen=S.items.filter(i=>!i.done).length, lb=$('listBadge');
   if(lb){lb.hidden=!nOpen;lb.textContent=nOpen>99?'99+':nOpen}
   $('composer').hidden=v!=='chat';
   $('wrap').classList.toggle('chatmode',v==='chat');
   if(keep){const n=$('newItem');if(n){n.value=keep.v;if(keep.f)n.focus()}}
+  if(rqf&&$('rq')){const r=$('rq');r.focus();r.setSelectionRange(r.value.length,r.value.length)}
+  const dl=$('recipeList'); if(dl) dl.innerHTML=S.recipes.map(r=>`<option value="${esc(r.title)}"></option>`).join('');
   if(v==='chat'){$('composer').style.bottom=$('tabs').offsetHeight+'px';if(opts.toBottom||nearBottom)window.scrollTo(0,document.body.scrollHeight)}
 }
 let tt;
@@ -917,7 +1065,7 @@ window.addEventListener('resize',()=>{if(ui.view==='chat')$('composer').style.bo
 
 /* ===== Hinzufügen-Auswahl ===== */
 const addDlg=$('addDlg');
-$('addGrid').innerHTML=[['event','Termin','kalender','var(--mario)','Für eine Person oder alle'],['task','Aufgabe','aufgaben','var(--lina)','Mit Sternen als Belohnung'],['meal','Essen planen','essen','var(--emilio)','Mittag oder Abend'],['item','Einkauf','einkauf','var(--family)','Auf die Liste setzen']]
+$('addGrid').innerHTML=[['event','Termin','kalender','var(--mario)','Für eine Person oder alle'],['task','Aufgabe','aufgaben','var(--lina)','Mit Sternen als Belohnung'],['meal','Essen planen','essen','var(--emilio)','Mittag oder Abend'],['item','Einkauf','einkauf','var(--family)','Auf die Liste setzen'],['bday','Geburtstag','geburtstage','var(--nadine)','Mit Countdown'],['recipe','Rezept','rezepte','#E08A00','Für später speichern']]
   .map(([k,l,i,c,d])=>`<button type="button" class="addtile" data-add="${k}" style="--c:${c}"><span class="ico">${ico(i)}</span><span>${l}<small>${d}</small></span></button>`).join('');
 $('addGrid').addEventListener('click',ev=>{
   const b=ev.target.closest('[data-add]'); if(!b) return;
@@ -926,6 +1074,8 @@ $('addGrid').addEventListener('click',ev=>{
   if(k==='event') openEvent(null);
   if(k==='task') openTask(null);
   if(k==='meal') openMeal(null,todayKey(),'abend');
+  if(k==='bday') openBday(null);
+  if(k==='recipe') openRecipe(null);
   if(k==='item'){ui.view='einkauf';window.scrollTo(0,0);render();setTimeout(()=>$('newItem')&&$('newItem').focus(),50)}
 });
 $('addClose').onclick=()=>addDlg.close();
@@ -1001,11 +1151,11 @@ function renderMealPickers(){
   document.querySelectorAll('#slotSeg [data-slot]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.slot===mealSlot));
   $('cookPick').innerHTML=pickerHtml(mealCook,'data-cook',{none:'Offen'});
 }
-function openMeal(id,date,slot){
+function openMeal(id,date,slot,pre){
   const m=id?S.meals.find(x=>x.id===id):null;
   mealEditing=m?m.id:null;
   $('mealDlgTitle').textContent=m?'Essen bearbeiten':'Essen planen';
-  mf.title.value=m?m.title:''; mf.date.value=m?m.date:(date||todayKey()); mf.ingredients.value=m?m.ingredients:'';
+  mf.title.value=m?m.title:(pre?pre.title:''); mf.date.value=m?m.date:(date||todayKey()); mf.ingredients.value=m?m.ingredients:(pre?pre.ingredients:'');
   mealSlot=m?m.slot:(slot||'abend'); mealCook=new Set(m&&m.cook?[m.cook]:[]);
   $('mealErr').textContent=''; $('mealDelete').hidden=!m;
   renderMealPickers(); mealDlg.showModal();
@@ -1036,8 +1186,12 @@ $('mealDelete').onclick=()=>{
   S.meals=S.meals.filter(x=>x.id!==id); mealDlg.close(); render(); toast('Essen gelöscht');
   write(sb.from('meals').delete().eq('id',id),()=>{if(old)S.meals.push(old)});
 };
+mf.title.addEventListener('change',()=>{
+  const r=S.recipes.find(x=>x.title.toLowerCase()===mf.title.value.trim().toLowerCase());
+  if(r&&!mf.ingredients.value.trim()) mf.ingredients.value=r.ingredients;
+});
 function ingredientsToList(id){
-  const m=S.meals.find(x=>x.id===id); if(!m) return;
+  const m=S.meals.find(x=>x.id===id)||S.recipes.find(x=>x.id===id); if(!m) return;
   const have=new Set(S.items.filter(i=>!i.done).map(i=>i.text.toLowerCase()));
   const neu=ingList(m).filter(t=>!have.has(t.toLowerCase()));
   if(!neu.length){toast('Alle Zutaten stehen schon auf der Liste');return}
@@ -1093,6 +1247,79 @@ function toggleTask(id){
   if(t.done) toast(t.stars?`Super! ${plural(t.stars,'Stern','Sterne')} für ${per(t.assignee).name}`:'Erledigt');
   write(sb.from('tasks').update({done:t.done,done_at:t.done?new Date(t.doneAt).toISOString():null}).eq('id',id),()=>{t.done=!t.done;t.doneAt=t.done?Date.now():0});
 }
+
+/* ===== Geburtstag-Dialog ===== */
+const bdayDlg=$('bdayDlg'), bf=$('bdayForm');
+let bdayEditing=null;
+function openBday(id){
+  if(S.missing.birthdays){toast('Geburtstage sind in Supabase noch nicht eingerichtet');return}
+  const b=id?S.birthdays.find(x=>x.id===id):null;
+  bdayEditing=b?b.id:null;
+  $('bdayDlgTitle').textContent=b?'Geburtstag bearbeiten':'Geburtstag eintragen';
+  bf.name.value=b?b.name:''; bf.date.value=b?b.date:''; bf.noYear.checked=b?b.noYear:false; bf.note.value=b?b.note:'';
+  $('bdayErr').textContent=''; $('bdayDelete').hidden=!b; bdayDlg.showModal();
+}
+bf.addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const name=bf.name.value.trim(), date=bf.date.value;
+  if(!name) return $('bdayErr').textContent='Trag einen Namen ein.';
+  if(!date) return $('bdayErr').textContent='Wähle das Geburtsdatum.';
+  const data={name,date,noYear:bf.noYear.checked,note:bf.note.value.trim()};
+  const row={name,date,no_year:data.noYear,note:data.note};
+  if(bdayEditing){
+    const id=bdayEditing, b=S.birthdays.find(x=>x.id===id), before={...b};
+    Object.assign(b,data);
+    write(sb.from('birthdays').update(row).eq('id',id),()=>{Object.assign(S.birthdays.find(x=>x.id===id)||{},before)});
+  }else{
+    const id=newId();
+    S.birthdays.push({id,...data});
+    write(sb.from('birthdays').insert({id,family_id:S.familyId,...row}),()=>{S.birthdays=S.birthdays.filter(x=>x.id!==id)});
+  }
+  bdayDlg.close(); render(); toast('Geburtstag gespeichert');
+});
+$('bdayCancel').onclick=()=>bdayDlg.close();
+$('bdayDelete').onclick=()=>{
+  if(!bdayEditing||!confirm('Diesen Geburtstag löschen?')) return;
+  const id=bdayEditing, old=S.birthdays.find(x=>x.id===id);
+  S.birthdays=S.birthdays.filter(x=>x.id!==id); bdayDlg.close(); render(); toast('Geburtstag gelöscht');
+  write(sb.from('birthdays').delete().eq('id',id),()=>{if(old)S.birthdays.push(old)});
+};
+
+/* ===== Rezept-Dialog ===== */
+const recipeDlg=$('recipeDlg'), rf=$('recipeForm');
+let recipeEditing=null;
+function openRecipe(id){
+  if(S.missing.recipes){toast('Rezepte sind in Supabase noch nicht eingerichtet');return}
+  const r=id?S.recipes.find(x=>x.id===id):null;
+  recipeEditing=r?r.id:null;
+  $('recipeDlgTitle').textContent=r?'Rezept bearbeiten':'Rezept speichern';
+  rf.title.value=r?r.title:''; rf.ingredients.value=r?r.ingredients:''; rf.steps.value=r?r.steps:''; rf.link.value=r?r.link:'';
+  $('recipeErr').textContent=''; $('recipeDelete').hidden=!r; recipeDlg.showModal();
+}
+rf.addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const title=rf.title.value.trim(), link=rf.link.value.trim();
+  if(!title) return $('recipeErr').textContent='Wie heißt das Gericht?';
+  if(link&&!/^https?:\/\//i.test(link)) return $('recipeErr').textContent='Der Link muss mit http:// oder https:// beginnen.';
+  const data={title,ingredients:rf.ingredients.value.trim(),steps:rf.steps.value.trim(),link};
+  if(recipeEditing){
+    const id=recipeEditing, r=S.recipes.find(x=>x.id===id), before={...r};
+    Object.assign(r,data);
+    write(sb.from('recipes').update(data).eq('id',id),()=>{Object.assign(S.recipes.find(x=>x.id===id)||{},before)});
+  }else{
+    const id=newId();
+    S.recipes.push({id,...data,ts:Date.now()});
+    write(sb.from('recipes').insert({id,family_id:S.familyId,...data,created_by:S.me}),()=>{S.recipes=S.recipes.filter(x=>x.id!==id)});
+  }
+  recipeDlg.close(); render(); toast('Rezept gespeichert');
+});
+$('recipeCancel').onclick=()=>recipeDlg.close();
+$('recipeDelete').onclick=()=>{
+  if(!recipeEditing||!confirm('Dieses Rezept löschen?')) return;
+  const id=recipeEditing, old=S.recipes.find(x=>x.id===id);
+  S.recipes=S.recipes.filter(x=>x.id!==id); recipeDlg.close(); render(); toast('Rezept gelöscht');
+  write(sb.from('recipes').delete().eq('id',id),()=>{if(old)S.recipes.push(old)});
+};
 
 /* ===== Profile ===== */
 const meDlg=$('meDlg');
@@ -1211,11 +1438,20 @@ document.addEventListener('click',ev=>{
     if(v==='kalender') openEvent(null);
     else if(v==='essen'){const tk=todayKey(), s=ymd(ui.mweek), e=ymd(addDays(ui.mweek,6));openMeal(null,tk>=s&&tk<=e?tk:s,'abend')}
     else if(v==='aufgaben') openTask(null);
+    else if(v==='geburtstage') openBday(null);
+    else if(v==='rezepte') openRecipe(null);
     else if(v==='einkauf'){const n=$('newItem');if(n)n.focus()}
     else addDlg.showModal();
     return;
   }
   if(d.meal){openMeal(d.meal);return}
+  if(d.bday){openBday(d.bday);return}
+  if('newBday' in d){openBday(null);return}
+  if(d.recipe){openRecipe(d.recipe);return}
+  if('newRecipe' in d){openRecipe(null);return}
+  if(d.rplan){const r=S.recipes.find(x=>x.id===d.rplan);if(r)openMeal(null,todayKey(),'abend',r);return}
+  if(d.rshop){ingredientsToList(d.rshop);return}
+  if('openMe' in d){openMe();return}
   if('newMeal' in d){openMeal(null,d.newMeal,d.slot||'abend');return}
   if(d.ing){ingredientsToList(d.ing);return}
   if(d.task){openTask(d.task);return}
@@ -1254,6 +1490,7 @@ document.addEventListener('click',ev=>{
   if(t.id==='addItem'){addItems();return}
   if(t.id==='meBtn'){openMe();return}
 });
+document.addEventListener('input',ev=>{if(ev.target.id==='rq'){ui.rq=ev.target.value;render()}});
 document.addEventListener('keydown',ev=>{if(ev.key==='Enter'&&ev.target.id==='newItem'&&!ev.isComposing){ev.preventDefault();addItems()}});
 
 /* ===== Anmeldung & Start ===== */
@@ -1273,7 +1510,7 @@ async function startApp(){
   const c=readCache();
   if(c&&c.userId===session.user.id&&c.familyId){
     setMembers(c.members||[]); S.me=c.me; S.familyId=c.familyId;
-    S.events=c.events||[]; S.items=c.items||[]; S.msgs=c.msgs||[]; S.meals=c.meals||[]; S.tasks=c.tasks||[];
+    S.events=c.events||[]; S.items=c.items||[]; S.msgs=c.msgs||[]; S.meals=c.meals||[]; S.tasks=c.tasks||[]; S.birthdays=c.birthdays||[]; S.recipes=c.recipes||[];
     document.body.classList.add('authed'); render();
   }
   try{
