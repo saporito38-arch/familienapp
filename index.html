@@ -381,30 +381,13 @@ svg.duo text{fill:currentColor;stroke:none;font-weight:800;font-family:inherit}
 .rcard .ra svg{width:16px;height:16px}
 .search{margin-bottom:12px}
 
-/* KI */
-.kibar{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1.5px solid color-mix(in srgb,var(--brand2) 30%,var(--line));background:var(--surface);border-radius:18px;padding:13px 14px;margin:0 0 14px;cursor:pointer;color:var(--muted);font-weight:600;box-shadow:var(--shadow)}
-.kibar svg{width:22px;height:22px;flex:none;color:var(--brand2)}
-.kibar b{margin-left:auto;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));padding:3px 9px;border-radius:999px}
-.dlg .kibar{margin:0 0 14px;box-shadow:none}
-.kibtn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:7px 13px;font-weight:700;font-size:14px;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2))}
-.kibtn svg{width:16px;height:16px}
-.kirow{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
-.kiex{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
-.kiex button{border:0;background:var(--soft);border-radius:999px;padding:6px 11px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);text-align:left}
-#kiIn{min-height:84px}
-.kires{display:grid;gap:8px;margin:6px 0 10px}
-.kiitem{display:flex;gap:12px;align-items:flex-start;padding:11px 12px;border-radius:16px;background:var(--soft2);border:1px solid var(--line);cursor:pointer}
-.kiitem input{width:22px;height:22px;margin:2px 0 0;flex:none;accent-color:var(--brand)}
-.kiitem .ki-ico{width:30px;height:30px;flex:none;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--c)}
-.kiitem .ki-ico svg{width:17px;height:17px}
-.kiitem .kt{display:block;font-weight:800;overflow-wrap:anywhere}
-.kiitem .kd{display:block;font-size:13px;color:var(--muted);font-weight:600}
-.kiitem.off{opacity:.5}
+.impbtn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 6px 14px color-mix(in srgb,var(--brand2) 25%,transparent)}
+.impbtn svg{width:17px;height:17px}
+.improw{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.urlrow{display:flex;gap:8px}
+.urlrow input{flex:1}
 .spin{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:rot .8s linear infinite;vertical-align:-3px;margin-right:6px}
 @keyframes rot{to{transform:rotate(360deg)}}
-.kistat{display:flex;gap:8px;align-items:center}
-.kistat .dotk{width:9px;height:9px;border-radius:50%;background:var(--muted)}
-.kistat .dotk.on{background:var(--brand)}
 
 /* Einkauf: Kategorien & Schnell hinzufügen */
 .cat{display:flex;align-items:center;gap:8px;padding:9px 16px 5px;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;background:var(--soft2)}
@@ -472,7 +455,6 @@ svg.duo text{fill:currentColor;stroke:none;font-weight:800;font-family:inherit}
 <dialog id="addDlg">
   <div class="dlg">
     <h2>Neu eintragen</h2>
-    <button type="button" class="kibar" id="addKi" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.9L19 9.7l-5.2 1.8L12 16.4l-1.8-4.9L5 9.7l5.2-1.8zM18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span>Einfach eintippen, die KI sortiert es ein</span><b>KI</b></button>
     <div class="addgrid" id="addGrid"></div>
     <div class="actions"><button type="button" class="btn" id="addClose">Abbrechen</button></div>
   </div>
@@ -575,23 +557,20 @@ svg.duo text{fill:currentColor;stroke:none;font-weight:800;font-family:inherit}
   <div class="dlg rv" id="rvBody"></div>
 </dialog>
 
-<dialog id="kiDlg">
-  <div class="dlg">
-    <h2 id="kiTitle">KI-Assistent</h2>
-    <p class="note" id="kiHint" style="margin:-8px 0 12px"></p>
-    <div id="kiInput">
-      <label class="field" style="margin-bottom:4px"><span id="kiLabel">Was möchtest du eintragen?</span><textarea id="kiIn" rows="3" maxlength="1500"></textarea></label>
-      <div class="kiex" id="kiEx"></div>
-    </div>
-    <div class="kires" id="kiRes"></div>
-    <p class="err" id="kiErr" role="alert"></p>
+<dialog id="importDlg">
+  <form class="dlg" id="importForm" novalidate>
+    <h2>Rezept aus Link</h2>
+    <p class="note" style="margin:-8px 0 14px">Link einer Rezeptseite einfügen (z. B. Chefkoch). Zutaten und Zubereitung werden übernommen, du prüfst sie danach kurz.</p>
+    <label class="field"><span>Link zum Rezept</span>
+      <span class="urlrow"><input type="text" name="url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://…"><button type="button" class="btn" id="importPaste" hidden>Einfügen</button></span></label>
+    <p class="err" id="importErr" role="alert"></p>
     <div class="actions">
-      <button type="button" class="btn" id="kiBack" hidden>Zurück</button>
-      <button type="button" class="btn" id="kiCancel">Abbrechen</button>
+      <button type="button" class="btn" id="importManual">Von Hand eintragen</button>
       <span class="spacer"></span>
-      <button type="button" class="btn primary" id="kiGo">Los</button>
+      <button type="button" class="btn" id="importCancel">Abbrechen</button>
+      <button type="submit" class="btn primary" id="importGo">Übernehmen</button>
     </div>
-  </div>
+  </form>
 </dialog>
 
 <dialog id="meDlg">
@@ -600,7 +579,6 @@ svg.duo text{fill:currentColor;stroke:none;font-weight:800;font-family:inherit}
     <div class="melist" id="melist"></div>
     <p class="note">Profilfotos sind für die ganze Familie sichtbar. Für Emilio könnt ihr ebenfalls ein Foto festlegen.</p>
     <div class="pushbox"><h3>Benachrichtigungen</h3><div id="pushBox" class="note">Wird geprüft …</div></div>
-    <div class="pushbox"><h3>KI-Assistent</h3><div id="kiBox" class="note"></div></div>
     <div class="actions">
       <button type="button" class="btn danger" id="logoutBtn">Abmelden</button>
       <span class="spacer"></span>
@@ -655,7 +633,6 @@ const IC={
   geburtstage:'<path d="M4.5 20.5h15M6 20.5v-7h12v7M6 16.5c2 1.2 4 1.2 6 0s4-1.2 6 0M12 13.5v-3M12 7.5c-.9 0-1.5-.7-1.5-1.5S12 3.5 12 3.5s1.5 1.7 1.5 2.5-.6 1.5-1.5 1.5z"/>',
   family:'<circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9.5" r="2.5"/><path d="M3 19.5c.6-3.4 3-5.3 6-5.3s5.4 1.9 6 5.3M15 14.6c2.8-.4 5.2 1.2 6 4.9"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
-  spark:'<path d="M12 3l1.8 4.9L19 9.7l-5.2 1.8L12 16.4l-1.8-4.9L5 9.7l5.2-1.8zM18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>',
   link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
   edit:'<path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/>',
   left:'<path d="M14.5 6l-6 6 6 6"/>',
@@ -726,7 +703,7 @@ const empty=(k,text,btn)=>`<div class="empty">${EMPTY[k]}${text}${btn?`<br>${btn
 
 /* ===== Zustand ===== */
 let session=null, PEOPLE=[], P={}, membersRaw=[];
-const S={me:null,familyId:null,events:[],items:[],msgs:[],meals:[],tasks:[],birthdays:[],recipes:[],missing:{},ki:false};
+const S={me:null,familyId:null,events:[],items:[],msgs:[],meals:[],tasks:[],birthdays:[],recipes:[],missing:{},imp:false};
 const startView=(location.hash||'').slice(1);
 const ui={view:VIEWS.includes(startView)?startView:'heute',filter:null,sel:ymd(new Date()),week:startOfWeek(new Date()),mweek:startOfWeek(new Date()),tfilter:null,list:'einkauf',month:new Date(new Date().getFullYear(),new Date().getMonth(),1)};
 let live=false, channel=null;
@@ -748,7 +725,7 @@ function setMembers(rows){
   P=Object.fromEntries(PEOPLE.map(p=>[p.id,p]));
 }
 function cache(){
-  try{localStorage.setItem(CACHE,JSON.stringify({userId:session&&session.user.id,members:membersRaw,me:S.me,familyId:S.familyId,events:S.events,items:S.items,msgs:S.msgs,meals:S.meals,tasks:S.tasks,birthdays:S.birthdays,recipes:S.recipes,ki:S.ki}))}catch(e){}
+  try{localStorage.setItem(CACHE,JSON.stringify({userId:session&&session.user.id,members:membersRaw,me:S.me,familyId:S.familyId,events:S.events,items:S.items,msgs:S.msgs,meals:S.meals,tasks:S.tasks,birthdays:S.birthdays,recipes:S.recipes,imp:S.imp}))}catch(e){}
 }
 function readCache(){try{return JSON.parse(localStorage.getItem(CACHE))}catch(e){return null}}
 
@@ -1002,8 +979,7 @@ function viewHeute(){
   const taskCard=card(`${secTitle('aufgaben',who===S.me?'Deine Aufgaben':`Aufgaben von ${esc(per(who).name)}`)}<button class="linkbtn" data-tab="aufgaben">Alle</button>`,
     myTasks.length?`<div class="list">${myTasks.slice(0,4).map(t=>taskRow(t,false)).join('')}</div>`:`<div class="empty">Keine offenen Aufgaben.</div>`,
     {flush:true,add:addRow('data-new-task','Aufgabe anlegen')});
-  const kibar=S.ki?`<button class="kibar" data-ki="eintrag">${ico('spark')}<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Was steht an? Einfach eintippen</span><b>KI</b></button>`:'';
-  return `${cover}${kibar}${tiles}<div class="family">${fam}</div>${hint}${evCardHtml}${tmCard}${taskCard}`;
+  return `${cover}${tiles}<div class="family">${fam}</div>${hint}${evCardHtml}${tmCard}${taskCard}`;
 }
 function weekNav(s,attr){
   const e=addDays(s,6);
@@ -1059,7 +1035,6 @@ function viewEssen(){
     </div>`;
   }).join('');
   return `${segnav()}${weekNav(s,'data-mweek')}
-    ${S.ki?`<div class="kirow"><button class="kibtn" data-ki="wochenplan">${ico('spark')}Abendessen vorschlagen lassen</button></div>`:''}
     ${anyMeal?'':`<section class="sec">${empty('essen','Für diese Woche ist noch nichts geplant. Tipp unten bei einem Tag auf Mittag oder Abend.')}</section>`}
     ${days}`;
 }
@@ -1136,9 +1111,9 @@ function viewRezepte(){
       <span class="ra"><button class="btn sm primary" data-rplan="${r.id}">${ico('essen')}Einplanen</button>${n?`<button class="btn sm" data-rshop="${r.id}">${ico('cartplus')}Zutaten einkaufen</button>`:''}</span></div>`};
   return `${segnav()}
     ${S.recipes.length>5?`<input type="text" id="rq" class="search" placeholder="Rezept oder Zutat suchen" value="${esc(ui.rq||'')}" autocomplete="off" aria-label="Rezepte durchsuchen">`:''}
-    ${S.ki?`<div class="kirow"><button class="kibtn" data-ki="rezept">${ico('spark')}Rezept aus Link übernehmen</button></div>`:''}
+    ${S.imp?`<div class="improw"><button class="impbtn" data-import>${ico('link')}Rezept aus Link übernehmen</button></div>`:''}
     <section class="sec"><div class="sec-head"><h2>${q?`Treffer (${list.length})`:'Eure Rezepte'}</h2><button class="linkbtn" data-new-recipe>+ Neues Rezept</button></div>
-    ${list.length?`<div class="list">${list.map(rc).join('')}</div>`:empty('essen',q?'Kein Rezept gefunden.':'Noch keine Rezepte. Speichert eure Lieblingsgerichte, dann plant ihr sie mit einem Tipp ein.',q?'':'<button class="btn primary" data-new-recipe>Rezept speichern</button>')}</section>`;
+    ${list.length?`<div class="list">${list.map(rc).join('')}</div>`:empty('essen',q?'Kein Rezept gefunden.':'Noch keine Rezepte. Speichert eure Lieblingsgerichte, dann plant ihr sie mit einem Tipp ein.',q?'':`<button class="btn primary" data-new-recipe>Rezept speichern</button>${S.imp?' <button class="btn" data-import>Aus Link</button>':''}`)}</section>`;
 }
 function viewChat(){
   const msgs=[...S.msgs].sort((a,b)=>a.ts-b.ts);
@@ -1179,7 +1154,6 @@ function render(opts={}){
   const nOpen=S.items.filter(i=>!i.done).length, lb=$('listBadge');
   if(lb){lb.hidden=!nOpen;lb.textContent=nOpen>99?'99+':nOpen}
   $('composer').hidden=v!=='chat';
-  $('addKi').hidden=!S.ki;
   $('wrap').classList.toggle('chatmode',v==='chat');
   if(keep){const n=$('newItem');if(n){n.value=keep.v;if(keep.f)n.focus()}}
   if(rqf&&$('rq')){const r=$('rq');r.focus();r.setSelectionRange(r.value.length,r.value.length)}
@@ -1491,163 +1465,47 @@ $('recipeDelete').onclick=()=>{
   recipeDlg.close(); softDelete('recipes','recipes',[recipeEditing],'Rezept gelöscht');
 };
 
-/* ===== Hilfen zum Anlegen (für KI-Vorschläge) ===== */
-function addEvent(d){const id=newId();S.events.push({id,note:'',...d});write(sb.from('events').insert({id,family_id:S.familyId,title:d.title,date:d.date,all_day:d.allDay,start_time:d.start,end_time:d.end,people:d.people,note:''}),()=>{S.events=S.events.filter(x=>x.id!==id)})}
-function addTask(d){const id=newId();S.tasks.push({id,...d,done:false,doneAt:0,createdBy:S.me,ts:Date.now()});write(sb.from('tasks').insert({id,family_id:S.familyId,title:d.title,assignee:d.assignee,due:d.due||null,stars:d.stars,created_by:S.me}),()=>{S.tasks=S.tasks.filter(x=>x.id!==id)})}
-function addMeal(d){const id=newId();S.meals.push({id,...d});write(sb.from('meals').insert({id,family_id:S.familyId,...d}),()=>{S.meals=S.meals.filter(x=>x.id!==id)})}
-function addBday(d){const id=newId();S.birthdays.push({id,...d});write(sb.from('birthdays').insert({id,family_id:S.familyId,name:d.name,date:d.date,no_year:d.noYear,note:d.note}),()=>{S.birthdays=S.birthdays.filter(x=>x.id!==id)})}
-
-/* ===== KI-Assistent ===== */
-async function kiCall(body){
-  const {data,error}=await sb.functions.invoke('familie-ki',{body});
+/* ===== Rezept aus Link (ohne KI) ===== */
+async function importCall(body){
+  const {data,error}=await sb.functions.invoke('rezept-import',{body});
   if(error){
-    let msg='Die KI ist gerade nicht erreichbar. Bitte später noch einmal versuchen.';
+    let msg='Der Import ist gerade nicht erreichbar. Bitte später noch einmal versuchen.';
     try{const j=await error.context.json();if(j&&j.error)msg=j.error}catch(e){}
     throw new Error(msg);
   }
   if(data&&data.error) throw new Error(data.error);
   return data;
 }
-async function kiPing(){
-  const was=S.ki;
-  try{const d=await kiCall({action:'ping'});S.ki=!!(d&&d.ok)}catch(e){S.ki=false}
-  if(was!==S.ki){cache();render()}
+async function importPing(){
+  const was=S.imp;
+  try{const d=await importCall({action:'ping'});S.imp=!!(d&&d.ok)}catch(e){S.imp=false}
+  if(was!==S.imp){cache();render()}
 }
-const isDate=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)&&!isNaN(parse(x));
-const isTime=x=>typeof x==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(x);
-const KI={
-  eintrag:{title:'Einfach eintippen',label:'Was steht an?',go:'Verstehen',
-    hint:'Die KI macht daraus Termine, Aufgaben, Einkäufe, Essen oder Geburtstage. Du siehst alles vorher.',
-    ph:'z. B. Morgen 15 Uhr Zahnarzt mit Lina, Milch und Eier kaufen',
-    ex:['Freitag 17 Uhr Fußball Lina','Emilio soll bis Sonntag sein Zimmer aufräumen, 3 Sterne','Wir brauchen Milch, Brot und Bananen','Samstag gibt es Pizza','Oma Rosi hat am 14. März Geburtstag']},
-  rezept:{title:'Rezept übernehmen',label:'Link zum Rezept oder Rezepttext',go:'Rezept auslesen',
-    hint:'Füge den Link einer Rezeptseite ein (z. B. aus dem Browser kopiert) oder den Text des Rezepts.',
-    ph:'https://…',ex:[]},
-  wochenplan:{title:'Abendessen vorschlagen',label:'Wünsche (optional)',go:'Vorschläge holen',
-    hint:'Für alle freien Abende dieser Woche. Eure gespeicherten Rezepte werden bevorzugt.',
-    ph:'z. B. vegetarisch, schnell, Kinder mögen keine Pilze',ex:['schnell und einfach','vegetarisch','mal was Neues']},
-};
-let ki={mode:'eintrag',stage:'input',items:[],shop:true,busy:false};
-const kiDlg=$('kiDlg');
-function openKi(mode){
-  if(!S.ki){toast('Die KI ist noch nicht eingerichtet');return}
-  const c=KI[mode]; ki={mode,stage:'input',items:[],shop:true,busy:false};
-  $('kiTitle').textContent=c.title; $('kiHint').textContent=c.hint; $('kiLabel').textContent=c.label;
-  const inp=$('kiIn'); inp.value=''; inp.placeholder=c.ph; inp.rows=mode==='rezept'?4:3;
-  $('kiEx').innerHTML=c.ex.map(x=>`<button type="button" data-ex="${esc(x)}">${esc(x)}</button>`).join('');
-  $('kiErr').textContent=''; renderKi(); kiDlg.showModal();
-  setTimeout(()=>inp.focus(),60);
+const importDlg=$('importDlg'), impF=$('importForm');
+let importBusy=false;
+function openImport(){
+  impF.url.value=''; $('importErr').textContent=''; setImportBusy(false);
+  $('importPaste').hidden=!(navigator.clipboard&&navigator.clipboard.readText);
+  importDlg.showModal(); setTimeout(()=>impF.url.focus(),60);
 }
-function kiWeekDays(){
-  const s=ui.mweek, today=todayKey();
-  return [...Array(7)].map((_,i)=>ymd(addDays(s,i))).filter(k=>k>=today&&!mealsOn(k).some(m=>m.slot==='abend'));
-}
-function renderKi(){
-  const review=ki.stage==='review';
-  $('kiInput').hidden=review; $('kiBack').hidden=!review;
-  const go=$('kiGo');
-  if(ki.busy){go.disabled=true;go.innerHTML='<span class="spin"></span>Denkt nach …'}
-  else if(review){const n=ki.items.filter(x=>x.on&&!x.disabled).length;go.disabled=!n;go.textContent=n?`${n} übernehmen`:'Nichts ausgewählt'}
-  else{go.disabled=false;go.textContent=KI[ki.mode].go}
-  $('kiRes').innerHTML=review?ki.items.map((x,i)=>`<label class="kiitem${x.on&&!x.disabled?'':' off'}" style="--c:${x.c}">
-      <input type="checkbox" data-kii="${i}" ${x.on&&!x.disabled?'checked':''} ${x.disabled?'disabled':''}>
-      <span class="ki-ico">${ico(x.icon)}</span><span><span class="kt">${esc(x.t)}</span><span class="kd">${esc(x.d)}</span></span></label>`).join('')
-      +(ki.mode==='wochenplan'&&ki.items.length?`<label class="toggle" style="margin:4px 0 0"><input type="checkbox" id="kiShop" ${ki.shop?'checked':''}> Zutaten gleich auf die Einkaufsliste</label>`:'')
-    :'';
-}
-const fmtD=k=>fmtShort(parse(k));
-const names=ids=>PEOPLE.length&&ids.length===PEOPLE.length?'Ganze Familie':ids.map(id=>per(id).name).join(', ');
-function kiProposals(out){
-  const items=[], ids=new Set(PEOPLE.map(p=>p.id));
-  for(const e of (out.eintraege||[])){
-    const ppl=(e.personen||[]).filter(p=>ids.has(p));
-    const title=String(e.titel||'').trim().slice(0,80);
-    if(e.typ==='termin'&&title){
-      const date=isDate(e.datum)?e.datum:todayKey(), start=isTime(e.start)?e.start:'', end=start&&isTime(e.ende)&&e.ende>start?e.ende:'';
-      const people=ppl.length?PEOPLE.map(p=>p.id).filter(id=>ppl.includes(id)):[S.me];
-      items.push({on:true,c:'var(--mario)',icon:'kalender',t:title,d:`Termin · ${fmtD(date)}${start?`, ${start}${end?`–${end}`:''} Uhr`:' · ganztägig'} · ${names(people)}`,
-        apply:()=>addEvent({title,date,allDay:!start,start,end,people})});
-    }else if(e.typ==='aufgabe'&&title){
-      const assignee=ppl[0]||S.me, due=isDate(e.datum)?e.datum:'', stars=Math.max(0,Math.min(5,Number(e.sterne)||0));
-      items.push({on:true,c:'var(--lina)',icon:'aufgaben',t:title,d:`Aufgabe · ${per(assignee).name}${due?` · bis ${fmtD(due)}`:''}${stars?` · ${plural(stars,'Stern','Sterne')}`:''}`,
-        apply:()=>addTask({title,assignee,due,stars})});
-    }else if(e.typ==='einkauf'){
-      const have=new Set(S.items.filter(i=>!i.done).map(i=>i.text.toLowerCase()));
-      const things=[...new Set((e.dinge||[]).map(cleanIngredient).filter(Boolean))].filter(t=>!have.has(t.toLowerCase()));
-      if(things.length) items.push({on:true,c:'var(--family)',icon:'einkauf',t:things.join(', '),d:`Einkaufsliste · ${plural(things.length,'Sache','Sachen')}`,
-        apply:()=>insertItems(things)});
-    }else if(e.typ==='essen'&&title){
-      const date=isDate(e.datum)?e.datum:todayKey(), slot=e.mahlzeit==='mittag'?'mittag':'abend';
-      const r=S.recipes.find(x=>x.title.toLowerCase()===title.toLowerCase());
-      items.push({on:true,c:'var(--emilio)',icon:'essen',t:title,d:`Essen · ${fmtD(date)} · ${slot==='mittag'?'Mittag':'Abend'}`,
-        apply:()=>addMeal({title,date,slot,cook:'',ingredients:r?r.ingredients:''})});
-    }else if(e.typ==='geburtstag'&&title&&isDate(e.datum)){
-      const noYear=!e.jahr_bekannt, d=parse(e.datum);
-      items.push({on:!S.missing.birthdays,disabled:S.missing.birthdays,c:'var(--nadine)',icon:'geburtstage',t:title,
-        d:S.missing.birthdays?'Geburtstage sind noch nicht eingerichtet':`Geburtstag · ${d.getDate()}. ${MON[d.getMonth()]}${noYear?'':` ${d.getFullYear()}`}`,
-        apply:()=>addBday({name:title,date:e.datum,noYear,note:''})});
-    }
-  }
-  return items;
-}
-async function kiGo(){
-  if(ki.busy) return;
-  if(ki.stage==='review'){
-    const sel=ki.items.filter(x=>x.on&&!x.disabled);
-    sel.forEach(x=>x.apply());
-    if(ki.mode==='wochenplan'&&ki.shop){
-      const have=new Set(S.items.filter(i=>!i.done).map(i=>i.text.toLowerCase())), add=[];
-      sel.forEach(x=>shopIngredients({ingredients:x.ingredients||''}).forEach(t=>{if(!have.has(t.toLowerCase())){have.add(t.toLowerCase());add.push(t)}}));
-      if(add.length) insertItems(add);
-    }
-    kiDlg.close(); render(); toast(`${plural(sel.length,'Eintrag','Einträge')} übernommen`); return;
-  }
-  const text=$('kiIn').value.trim(); $('kiErr').textContent='';
-  if(!text&&ki.mode!=='wochenplan'){$('kiIn').focus();return}
-  ki.busy=true; renderKi();
+function setImportBusy(b){importBusy=b;const g=$('importGo');g.disabled=b;g.innerHTML=b?'<span class="spin"></span>Lädt …':'Übernehmen'}
+impF.addEventListener('submit',async ev=>{
+  ev.preventDefault(); if(importBusy) return;
+  const m=String(impF.url.value).match(/https?:\/\/[^\s<>"']+/i);   // Link auch aus „Teilen“-Text herausfischen
+  if(!m){$('importErr').textContent='Bitte einen Link einfügen, der mit https:// beginnt.';impF.url.focus();return}
+  $('importErr').textContent=''; setImportBusy(true);
   try{
-    if(ki.mode==='eintrag'){
-      const out=await kiCall({action:'eintrag',text,today:todayKey(),me:S.me,members:PEOPLE.map(p=>({id:p.id,name:p.name}))});
-      ki.items=kiProposals(out);
-      if(!ki.items.length) throw new Error(out.rueckfrage||'Das habe ich nicht verstanden. Schreib es etwas genauer, z. B. „Montag 16 Uhr Turnen Lina“.');
-      ki.stage='review';
-    }else if(ki.mode==='rezept'){
-      const out=await kiCall({action:'rezept',input:text});
-      if(!out.gefunden) throw new Error('Auf dieser Seite wurde kein Rezept gefunden. Kopiere den Rezepttext hinein.');
-      kiDlg.close();
-      openRecipe(null,{title:String(out.titel||'').slice(0,80),ingredients:(out.zutaten||[]).join('\n'),
-        steps:(out.zubereitung||[]).map(x=>String(x).replace(/^\s*\d+[.)]\s*/,'')).join('\n'),link:out.link||'',
-        note:''});
-      toast('Rezept erkannt. Bitte kurz prüfen und speichern.');
-      return;
-    }else{
-      const days=kiWeekDays();
-      if(!days.length) throw new Error('In dieser Woche ist schon jeder Abend geplant.');
-      const since=ymd(addDays(new Date(),-21));
-      const out=await kiCall({action:'wochenplan',days,wishes:text,recipes:S.recipes.map(r=>r.title),recent:S.meals.filter(m=>m.date>=since).map(m=>m.title)});
-      const used=new Set();
-      ki.items=(out.vorschlaege||[]).filter(v=>days.includes(v.datum)&&!used.has(v.datum)&&used.add(v.datum)).sort((a,b)=>a.datum.localeCompare(b.datum)).map(v=>{
-        const title=String(v.titel||'').slice(0,80), r=S.recipes.find(x=>x.title.toLowerCase()===title.toLowerCase());
-        const ingredients=r?r.ingredients:(v.zutaten||[]).join(', ');
-        return {on:true,c:'var(--emilio)',icon:r?'rezepte':'essen',t:title,d:`${fmtD(v.datum)} · Abend${r?' · euer Rezept':''}${v.grund?` · ${v.grund}`:''}`,ingredients,
-          apply:()=>addMeal({title,date:v.datum,slot:'abend',cook:'',ingredients})};
-      });
-      if(!ki.items.length) throw new Error('Es kamen keine passenden Vorschläge. Bitte noch einmal versuchen.');
-      ki.stage='review';
-    }
-  }catch(e){ $('kiErr').textContent=e.message||'Das hat nicht geklappt.'; }
-  finally{ ki.busy=false; if(kiDlg.open) renderKi(); }
-}
-$('kiGo').onclick=kiGo;
-$('kiCancel').onclick=()=>kiDlg.close();
-$('kiBack').onclick=()=>{ki.stage='input';$('kiErr').textContent='';renderKi()};
-$('kiEx').addEventListener('click',ev=>{const b=ev.target.closest('[data-ex]');if(b){const i=$('kiIn');i.value=b.dataset.ex;i.focus()}});
-$('kiRes').addEventListener('change',ev=>{
-  if(ev.target.id==='kiShop'){ki.shop=ev.target.checked;return}
-  const i=ev.target.dataset.kii; if(i!=null){ki.items[i].on=ev.target.checked;renderKi()}
+    const r=await importCall({url:m[0]});
+    importDlg.close();
+    openRecipe(null,{title:String(r.title||'').slice(0,80),ingredients:(r.ingredients||[]).join('\n'),
+      steps:(r.steps||[]).map(x=>String(x).replace(/^\s*\d+[.)]\s*/,'')).join('\n'),link:r.link||m[0]});
+    toast(r.ingredients&&r.ingredients.length?'Rezept übernommen. Kurz prüfen und speichern.':'Kaum Daten gefunden. Bitte ergänzen.');
+  }catch(e){$('importErr').textContent=e.message}
+  finally{setImportBusy(false)}
 });
-$('kiIn').addEventListener('keydown',ev=>{if(ev.key==='Enter'&&(ev.metaKey||ev.ctrlKey)){ev.preventDefault();kiGo()}});
-$('addKi').onclick=()=>{addDlg.close();openKi('eintrag')};
+$('importCancel').onclick=()=>importDlg.close();
+$('importManual').onclick=()=>{const u=String(impF.url.value).match(/https?:\/\/[^\s<>"']+/i);importDlg.close();openRecipe(null,{link:u?u[0]:''})};
+$('importPaste').onclick=async()=>{try{const t=await navigator.clipboard.readText();if(t){impF.url.value=t.trim();impF.url.focus()}}catch(e){toast('Einfügen nicht erlaubt. Bitte lange tippen und „Einfügen“ wählen.')}};
 
 /* ===== Rezept-Ansicht (zum Kochen) ===== */
 const recipeViewDlg=$('recipeViewDlg');
@@ -1688,12 +1546,7 @@ function renderMeList(){
     <span class="pinfo"><span class="pname">${esc(p.name)}${S.me===p.id?' (du)':''}</span>${p.photo?`<button type="button" class="linkbtn small" data-unphoto="${p.id}">Foto entfernen</button>`:''}</span>
     <span class="pacts"><label class="btn sm upl">${p.photo?'Foto ändern':'Foto wählen'}<input class="vh" type="file" accept="image/*" data-photo="${p.id}"></label></span></div>`).join('');
 }
-function renderKiBox(){
-  $('kiBox').innerHTML=S.ki
-    ?`<p class="kistat"><span class="dotk on"></span><b>Aktiv.</b></p><p>Tippe auf der Startseite einfach ein, was ansteht. Außerdem: Rezepte aus Links übernehmen und Abendessen vorschlagen lassen. Die KI trägt nie selbst ein, du bestätigst immer.</p>`
-    :`<p class="kistat"><span class="dotk"></span><b>Nicht eingerichtet.</b></p><p>Die Anleitung steht im Repository unter <code>supabase/KI-EINRICHTEN.md</code> (ca. 10 Minuten, einmalig).</p>`;
-}
-function openMe(){renderMeList();renderPush();renderKiBox();meDlg.showModal()}
+function openMe(){renderMeList();renderPush();meDlg.showModal()}
 function setPhoto(slug,photo){
   const p=P[slug]; if(!p) return;
   const old=p.photo; p.photo=photo;
@@ -1846,7 +1699,7 @@ document.addEventListener('click',ev=>{
     return;
   }
   if(d.quick){insertItems([d.quick]);render();buzz();toast(`${d.quick} hinzugefügt`);return}
-  if(d.ki){openKi(d.ki);return}
+  if('import' in d){openImport();return}
   if(d.rview){openRecipeView(d.rview);return}
   if(t.id==='addItem'){addItems();return}
   if(t.id==='meBtn'){openMe();return}
@@ -1871,12 +1724,12 @@ async function startApp(){
   const c=readCache();
   if(c&&c.userId===session.user.id&&c.familyId){
     setMembers(c.members||[]); S.me=c.me; S.familyId=c.familyId;
-    S.events=c.events||[]; S.items=c.items||[]; S.msgs=c.msgs||[]; S.meals=c.meals||[]; S.tasks=c.tasks||[]; S.birthdays=c.birthdays||[]; S.recipes=c.recipes||[]; S.ki=!!c.ki;
+    S.events=c.events||[]; S.items=c.items||[]; S.msgs=c.msgs||[]; S.meals=c.meals||[]; S.tasks=c.tasks||[]; S.birthdays=c.birthdays||[]; S.recipes=c.recipes||[]; S.imp=!!c.imp;
     document.body.classList.add('authed'); render();
   }
   try{
     await loadAll();
-    document.body.classList.add('authed'); render(); subscribe(); kiPing();
+    document.body.classList.add('authed'); render(); subscribe(); importPing();
   }catch(e){
     console.error(e);
     if(e.message==='nofamily'){await sb.auth.signOut();showLogin('Dieses Konto ist noch keiner Familie zugeordnet.');return}
